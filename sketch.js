@@ -15,6 +15,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  pixelDensity(1);
   textFont("Helvetica");
   buildButtons();
 }
