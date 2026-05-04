@@ -14,15 +14,15 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight); // ✅ FIX 1: fits any screen size
+  createCanvas(windowWidth, windowHeight);
   textFont("Helvetica");
-  buildButtons(); // build buttons in a separate function so we can rebuild on resize
+  buildButtons();
 }
 
 function buildButtons() {
   buttons = [];
-  let btnWidth = min(width * 0.85, 500); // ✅ FIX 2: max 500px but shrinks on phone
-  let btnHeight = max(height * 0.08, 55); // ✅ FIX 3: tall enough to tap on phone
+  let btnWidth = min(width * 0.85, 500);
+  let btnHeight = max(height * 0.09, 60);
   let spacing = height * 0.03;
   let startY = height * 0.42;
 
@@ -39,7 +39,7 @@ function buildButtons() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight); // ✅ FIX 4: handles phone rotation
+  resizeCanvas(windowWidth, windowHeight);
   buildButtons();
 }
 
@@ -50,17 +50,18 @@ function draw() {
 
   fill(255);
   textAlign(CENTER, TOP);
-  textSize(max(width * 0.035, 20)); // ✅ FIX 5: text scales with screen
+  textSize(max(width * 0.035, 20));
   text("pH Scale Simulation", width / 2, height * 0.1);
 
   fill(255);
-  textSize(max(width * 0.018, 13)); // ✅ FIX 6: description text scales too
+  textSize(min(max(width * 0.018, 13), 18));
   textStyle(BOLD);
+  let descWidth = min(width * 0.85, 600);
   text(
     "Learn about the pH scale by mixing liquids and testing them with litmus paper.",
-    width / 2,
+    width / 2 - descWidth / 2,
     height * 0.22,
-    width * 0.85 // ✅ FIX 7: wraps text properly on small screens
+    descWidth
   );
 
   for (let btn of buttons) {
@@ -73,19 +74,21 @@ function drawButton(btn) {
   fill(btn.color);
   rect(btn.x, btn.y, btn.w, btn.h, 20);
   fill(0);
-  textSize(max(width * 0.018, 13)); // ✅ scales button text too
+  textSize(min(max(width * 0.018, 13), 18));
   textStyle(NORMAL);
   textAlign(CENTER, CENTER);
-  text(btn.label, btn.x + btn.w / 2, btn.y + btn.h / 2);
+  text(btn.label, btn.x + 10, btn.y + 2, btn.w - 20, btn.h - 4);
 }
 
 function mousePressed() {
-  handlePress(mouseX, mouseY); // ✅ FIX 8: shared function for mouse and touch
+  handlePress(mouseX, mouseY);
 }
 
 function touchStarted() {
-  handlePress(touches[0].x, touches[0].y); // ✅ FIX 9: touch support added!
-  return false; // prevents page scrolling when tapping
+  if (touches.length > 0) {
+    handlePress(touches[0].x, touches[0].y);
+  }
+  return false;
 }
 
 function handlePress(x, y) {
@@ -93,7 +96,7 @@ function handlePress(x, y) {
     if (x > btn.x && x < btn.x + btn.w && y > btn.y && y < btn.y + btn.h) {
       playClickSound();
       if (btn.label === "Magic Liquids: Acid or Base?") {
-        window.open("https://parthmevada2307.github.io/Sim1/", "_self"); // ✅ FIX 10: _self works in iframes on mobile
+        window.open("https://parthmevada2307.github.io/Sim1/", "_self");
       }
       if (btn.label === "How is it acidic or basic?") {
         window.open("https://parthmevada2307.github.io/Sim2/", "_self");
