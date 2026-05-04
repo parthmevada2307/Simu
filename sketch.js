@@ -81,15 +81,8 @@ function drawButton(btn) {
   text(btn.label, btn.x + 10, btn.y + 2, btn.w - 20, btn.h - 4);
 }
 
-function mousePressed() {
+function mouseClicked() {
   handlePress(mouseX, mouseY);
-}
-
-function touchStarted() {
-  if (touches.length > 0) {
-    handlePress(touches[0].x, touches[0].y);
-  }
-  return false;
 }
 
 function handlePress(x, y) {
