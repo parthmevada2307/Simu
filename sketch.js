@@ -8,7 +8,7 @@ function preload() {
 }
 
 function setup() {
-  window.scrollTo(0, 0);
+  setTimeout(() => { document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   createCanvas(windowWidth, windowHeight);
   pixelDensity(1);
   textFont("Helvetica");
