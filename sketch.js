@@ -24,8 +24,8 @@ function buildButtons() {
   buttons = [];
   let btnWidth = min(width * 0.85, 500);
   let btnHeight = max(height * 0.09, 60);
-  let spacing = height * 0.03;
-  let startY = height * 0.42;
+  let spacing = max(height * 0.03, 15);
+  let startY = height * 0.32; // moved up from 0.42
 
   for (let i = 0; i < 3; i++) {
     buttons.push({
