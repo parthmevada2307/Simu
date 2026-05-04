@@ -1,10 +1,4 @@
 let buttons = [];
-let buttonLabels = [
-  "Magic Liquids: Acid or Base?",
-  "How is it acidic or basic?",
-  "Mix and Change! Can We Flip It?"
-];
-let buttonColors = ["#4da6ff", "#ffd633", "#66cc66"];
 let bgImage;
 let clickSound;
 
@@ -17,31 +11,57 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   pixelDensity(1);
   textFont("Helvetica");
-  buildButtons();
+  buildDOMButtons();
 }
 
-function buildButtons() {
+function buildDOMButtons() {
+  // Remove existing buttons
+  for (let btn of buttons) {
+    if (btn.dom) btn.dom.remove();
+  }
   buttons = [];
+
+  let buttonLabels = [
+    { label: "Magic Liquids: Acid or Base?", color: "#4da6ff", url: "https://parthmevada2307.github.io/Sim1/" },
+    { label: "How is it acidic or basic?", color: "#ffd633", url: "https://parthmevada2307.github.io/Sim2/" },
+    { label: "Mix and Change! Can We Flip It?", color: "#66cc66", url: "https://parthmevada2307.github.io/Sim3/" }
+  ];
+
   let btnWidth = min(width * 0.85, 500);
   let btnHeight = max(height * 0.09, 60);
   let spacing = max(height * 0.03, 15);
-  let startY = height * 0.32; // moved up from 0.42
+  let startY = height * 0.32;
 
-  for (let i = 0; i < 3; i++) {
-    buttons.push({
-      x: width / 2 - btnWidth / 2,
-      y: startY + i * (btnHeight + spacing),
-      w: btnWidth,
-      h: btnHeight,
-      label: buttonLabels[i],
-      color: buttonColors[i]
+  for (let i = 0; i < buttonLabels.length; i++) {
+    let b = buttonLabels[i];
+    let btn = createButton(b.label);
+    
+    btn.position(width / 2 - btnWidth / 2, startY + i * (btnHeight + spacing));
+    btn.size(btnWidth, btnHeight);
+    
+    btn.style('background-color', b.color);
+    btn.style('color', '#000');
+    btn.style('border', 'none');
+    btn.style('border-radius', '20px');
+    btn.style('font-family', 'Helvetica, Arial, sans-serif');
+    btn.style('font-size', `${min(max(width * 0.018, 13), 18)}px`);
+    btn.style('font-weight', 'bold');
+    btn.style('cursor', 'pointer');
+    btn.style('box-shadow', '0 4px 6px rgba(0,0,0,0.3)');
+
+    // Use pure DOM event listener for maximum mobile compatibility
+    btn.elt.addEventListener('click', () => {
+      playClickSound();
+      window.open(b.url, "_self");
     });
+
+    buttons.push({ dom: btn });
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  buildButtons();
+  buildDOMButtons();
 }
 
 function draw() {
@@ -64,42 +84,6 @@ function draw() {
     height * 0.22,
     descWidth
   );
-
-  for (let btn of buttons) {
-    drawButton(btn);
-  }
-}
-
-function drawButton(btn) {
-  noStroke();
-  fill(btn.color);
-  rect(btn.x, btn.y, btn.w, btn.h, 20);
-  fill(0);
-  textSize(min(max(width * 0.018, 13), 18));
-  textStyle(NORMAL);
-  textAlign(CENTER, CENTER);
-  text(btn.label, btn.x + 10, btn.y + 2, btn.w - 20, btn.h - 4);
-}
-
-function mouseClicked() {
-  handlePress(mouseX, mouseY);
-}
-
-function handlePress(x, y) {
-  for (let btn of buttons) {
-    if (x > btn.x && x < btn.x + btn.w && y > btn.y && y < btn.y + btn.h) {
-      playClickSound();
-      if (btn.label === "Magic Liquids: Acid or Base?") {
-        window.open("https://parthmevada2307.github.io/Sim1/", "_self");
-      }
-      if (btn.label === "How is it acidic or basic?") {
-        window.open("https://parthmevada2307.github.io/Sim2/", "_self");
-      }
-      if (btn.label === "Mix and Change! Can We Flip It?") {
-        window.open("https://parthmevada2307.github.io/Sim3/", "_self");
-      }
-    }
-  }
 }
 
 function playClickSound() {
