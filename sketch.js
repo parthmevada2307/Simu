@@ -4,12 +4,8 @@ let buttonLabels = [
   "How is it acidic or basic?",
   "Mix and Change! Can We Flip It?"
 ];
-
-let buttonColors = ["#4da6ff", "#ffd633", "#66cc66"]; // Blue, Yellow, Green
-let buttonWidths = [500, 500, 500]; // Increased widths
-
-let osc; // oscillator for click sound
-let bgImage; // background image
+let buttonColors = ["#4da6ff", "#ffd633", "#66cc66"];
+let bgImage;
 let clickSound;
 
 function preload() {
@@ -18,28 +14,33 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1200, 800);
+  createCanvas(windowWidth, windowHeight); // ✅ FIX 1: fits any screen size
   textFont("Helvetica");
+  buildButtons(); // build buttons in a separate function so we can rebuild on resize
+}
 
-  let btnHeight = 70;
-  let spacing = 50;
+function buildButtons() {
+  buttons = [];
+  let btnWidth = min(width * 0.85, 500); // ✅ FIX 2: max 500px but shrinks on phone
+  let btnHeight = max(height * 0.08, 55); // ✅ FIX 3: tall enough to tap on phone
+  let spacing = height * 0.03;
+  let startY = height * 0.42;
 
   for (let i = 0; i < 3; i++) {
-    let btnWidth = buttonWidths[i];
     buttons.push({
       x: width / 2 - btnWidth / 2,
-      y: 320 + i * (btnHeight + spacing),
+      y: startY + i * (btnHeight + spacing),
       w: btnWidth,
       h: btnHeight,
       label: buttonLabels[i],
       color: buttonColors[i]
     });
   }
+}
 
-  osc = new p5.Oscillator('square');
-  osc.freq(1000);
-  osc.amp(0);
-  osc.start();
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // ✅ FIX 4: handles phone rotation
+  buildButtons();
 }
 
 function draw() {
@@ -49,13 +50,18 @@ function draw() {
 
   fill(255);
   textAlign(CENTER, TOP);
-  textSize(48);
-  text("pH Scale Simulation", width / 2, 87);
+  textSize(max(width * 0.035, 20)); // ✅ FIX 5: text scales with screen
+  text("pH Scale Simulation", width / 2, height * 0.1);
 
   fill(255);
-  textSize(22);
+  textSize(max(width * 0.018, 13)); // ✅ FIX 6: description text scales too
   textStyle(BOLD);
-  text("Learn about the pH scale by mixing liquids and testing them with litmus paper.", width / 2, 170);
+  text(
+    "Learn about the pH scale by mixing liquids and testing them with litmus paper.",
+    width / 2,
+    height * 0.22,
+    width * 0.85 // ✅ FIX 7: wraps text properly on small screens
+  );
 
   for (let btn of buttons) {
     drawButton(btn);
@@ -66,35 +72,34 @@ function drawButton(btn) {
   noStroke();
   fill(btn.color);
   rect(btn.x, btn.y, btn.w, btn.h, 20);
-
   fill(0);
-  textSize(18);
+  textSize(max(width * 0.018, 13)); // ✅ scales button text too
+  textStyle(NORMAL);
   textAlign(CENTER, CENTER);
   text(btn.label, btn.x + btn.w / 2, btn.y + btn.h / 2);
 }
 
 function mousePressed() {
-  for (let btn of buttons) {
-    if (
-      mouseX > btn.x &&
-      mouseX < btn.x + btn.w &&
-      mouseY > btn.y &&
-      mouseY < btn.y + btn.h
-    ) {
-      playClickSound();
+  handlePress(mouseX, mouseY); // ✅ FIX 8: shared function for mouse and touch
+}
 
-     
+function touchStarted() {
+  handlePress(touches[0].x, touches[0].y); // ✅ FIX 9: touch support added!
+  return false; // prevents page scrolling when tapping
+}
+
+function handlePress(x, y) {
+  for (let btn of buttons) {
+    if (x > btn.x && x < btn.x + btn.w && y > btn.y && y < btn.y + btn.h) {
+      playClickSound();
       if (btn.label === "Magic Liquids: Acid or Base?") {
-        window.open("https://parthmevada2307.github.io/Sim1/", "_blank");
+        window.open("https://parthmevada2307.github.io/Sim1/", "_self"); // ✅ FIX 10: _self works in iframes on mobile
       }
-      
-       if (btn.label === "How is it acidic or basic?" 
-) {
-        window.open("https://parthmevada2307.github.io/Sim2/","_blank");
+      if (btn.label === "How is it acidic or basic?") {
+        window.open("https://parthmevada2307.github.io/Sim2/", "_self");
       }
-      
       if (btn.label === "Mix and Change! Can We Flip It?") {
-        window.open("https://parthmevada2307.github.io/Sim3/", "_blank");
+        window.open("https://parthmevada2307.github.io/Sim3/", "_self");
       }
     }
   }
