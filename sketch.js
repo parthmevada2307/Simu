@@ -8,6 +8,7 @@ function preload() {
 }
 
 function setup() {
+  window.scrollTo(0, 0);
   createCanvas(windowWidth, windowHeight);
   pixelDensity(1);
   textFont("Helvetica");
