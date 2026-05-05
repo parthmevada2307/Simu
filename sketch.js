@@ -29,7 +29,7 @@ function buildDOMButtons() {
   ];
 
   let btnWidth = min(width * 0.85, 500);
-  let btnHeight = max(height * 0.09, 60);
+  let btnHeight = max(height * 0.1, 80);
   let spacing = max(height * 0.03, 15);
   let startY = height * 0.32;
 
@@ -45,10 +45,12 @@ function buildDOMButtons() {
     btn.style('border', 'none');
     btn.style('border-radius', '20px');
     btn.style('font-family', 'Helvetica, Arial, sans-serif');
-    btn.style('font-size', `${min(max(width * 0.018, 13), 18)}px`);
+    btn.style('font-size', `${min(max(width * 0.018, 14), 18)}px`);
     btn.style('font-weight', 'bold');
     btn.style('cursor', 'pointer');
     btn.style('box-shadow', '0 4px 6px rgba(0,0,0,0.3)');
+    btn.style('padding', '10px');
+    btn.style('line-height', '1.3');
 
     // Use pure DOM event listener for maximum mobile compatibility
     btn.elt.addEventListener('click', () => {
@@ -78,13 +80,8 @@ function draw() {
   fill(255);
   textSize(min(max(width * 0.018, 13), 18));
   textStyle(BOLD);
-  let descWidth = min(width * 0.85, 600);
-  text(
-    "Learn about the pH scale by mixing liquids and testing them with litmus paper.",
-    width / 2 - descWidth / 2,
-    height * 0.22,
-    descWidth
-  );
+  let descText = "Learn about the pH scale by mixing liquids\nand testing them with litmus paper.";
+  text(descText, width / 2, height * 0.22);
 }
 
 function playClickSound() {
